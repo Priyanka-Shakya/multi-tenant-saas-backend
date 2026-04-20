@@ -1,0 +1,38 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "test": "jest --runInBand --config jest.config.js",
+    "seed": "ts-node src/seed/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcrypt": "^6.0.0",
+    "bull": "^4.16.5",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "ioredis": "^5.10.1",
+    "nodemailer": "^8.0.5",
+    "prisma": "^5.22.0"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/bull": "^3.15.9",
+    "@types/express": "^5.0.6",
+    "@types/ioredis": "^4.28.10",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.6.0",
+    "@types/nodemailer": "^8.0.0",
+    "@types/supertest": "^7.2.0",
+    "jest": "^30.3.0",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^6.0.3"
+  }
+}

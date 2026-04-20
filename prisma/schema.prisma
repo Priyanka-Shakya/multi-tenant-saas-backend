@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  users      User[]
+  apiKeys    ApiKey[]
+  emailLogs  EmailLog[]
+  auditLogs  AuditLog[]
+}
+
+model EmailLog {
+  id          String   @id @default(uuid())
+  recipient   String
+  template    String
+  status      String   // 'pending', 'sent', 'failed'
+  attemptCount Int     @default(0)
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  role      Role
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  apiKeys   ApiKey[]
+  createdAt DateTime @default(now())
+}
+
+
+model ApiKey {
+  id          String    @id @default(uuid())
+  keyHash     String    
+  tenantId    String
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+  createdBy   String
+  user        User      @relation(fields: [createdBy], references: [id])
+  expiresAt   DateTime?
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+}
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  userId       String?
+  action       String
+  resourceType String
+  resourceId   String?
+  previousValue Json?
+  newValue     Json?
+  ipAddress    String?
+  apiKeyUsed   String?
+  chainHash    String
+  createdAt    DateTime @default(now())
+}
+
+
+enum Role {
+  OWNER
+  MEMBER
+}
